@@ -7,10 +7,17 @@ import com.github.syamantm.logback.schedule.ChangeLogLevelTask
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
+sealed trait LoggerChangeScheduler {
+  def start(): Unit
+
+  def stop(): Unit
+}
+
 /**
   * @author syamantak.
   */
-class LoggerChangeScheduler(externalSource: ExternalSource, scheduleConfig: ScheduleConfig) {
+class DefaultLoggerChangeScheduler(externalSource: ExternalSource,
+                                   scheduleConfig: ScheduleConfig) extends LoggerChangeScheduler {
 
   private val scheduler = Executors.newSingleThreadScheduledExecutor()
 
@@ -28,4 +35,9 @@ class LoggerChangeScheduler(externalSource: ExternalSource, scheduleConfig: Sche
     }
     scheduler.scheduleAtFixedRate(task, scheduleConfig.initialDelay, scheduleConfig.interval, scheduleConfig.timeUnit)
   }
+
+  override def stop(): Unit = scheduler.shutdown()
 }
+
+
+

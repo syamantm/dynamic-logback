@@ -12,14 +12,28 @@ implements a way to make it possible to change logback log level at runtime base
 
 ## Usage
 
+### Fluent API
+
+```scala
+val externalSource = DynamoDBSourceBuilder()
+                        .usingConfig(DynamoDBConfig(...))
+                        .toSource()
+                        
+val scheduler = DynamicLogging()
+                     .fromExternalSource(externalSource)
+                     .withScheduleConfig(ScheduleConfig(..))
+                     .start()
+```
+
+### Using Dependency Injection
+
 ```scala
 // boilerplate for DynamoDB
 val dynamoDbConfig = DynamoDBConfig(...)
 val dynamoDbClient = new AmazonDynamoDBClient(new DefaultAWSCredentialsProviderChain)
-val reader = DynamoLogLevelReader(dynamoDbConfig, dynamoDbClient)
  
-// Configure an external source 
-val source = DynamoDBSource(reader)
+// Create an external source 
+val source: ExternalSource = DynamoDBSource(dynamoDbConfig, dynamoDbClient)
 
 val config = ScheduleConfig(..)
 val scheduler = new LoggerChangeScheduler(source, config)
