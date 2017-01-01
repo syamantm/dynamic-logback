@@ -1,7 +1,7 @@
 package com.github.syamantm.logback.schedule
 
 import ch.qos.logback.classic.{Level, Logger => LogbackLogger}
-import com.github.syamantm.logback.api.ExternalSource
+import com.github.syamantm.logback.api.LoggingConfigSource
 import org.slf4j.LoggerFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -10,10 +10,10 @@ import scala.concurrent.Future
 /**
   * @author syamantak.
   */
-class ChangeLogLevelTask(externalSource: ExternalSource) {
+class ChangeLogLevelTask(source: LoggingConfigSource) {
 
   def apply(): Future[Unit] = {
-    externalSource.getAppenderState() map { state =>
+    source.getLoggerState() map { state =>
       state.logLevels foreach { loggerLogLevel =>
         val level = parseLogLevel(loggerLogLevel.level)
         LoggerFactory.getLogger(loggerLogLevel.logger) match {

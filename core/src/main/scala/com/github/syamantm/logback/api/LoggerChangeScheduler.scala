@@ -16,7 +16,7 @@ sealed trait LoggerChangeScheduler {
 /**
   * @author syamantak.
   */
-class DefaultLoggerChangeScheduler(externalSource: ExternalSource,
+class DefaultLoggerChangeScheduler(source: LoggingConfigSource,
                                    scheduleConfig: ScheduleConfig) extends LoggerChangeScheduler {
 
   private val scheduler = Executors.newSingleThreadScheduledExecutor()
@@ -24,7 +24,7 @@ class DefaultLoggerChangeScheduler(externalSource: ExternalSource,
   def start(): Unit = {
     val task = new Runnable {
       override def run(): Unit = {
-        val changeLogLevel = new ChangeLogLevelTask(externalSource)
+        val changeLogLevel = new ChangeLogLevelTask(source)
         val latch = new CountDownLatch(1)
         changeLogLevel() onComplete {
           case Success(_) => latch.countDown()

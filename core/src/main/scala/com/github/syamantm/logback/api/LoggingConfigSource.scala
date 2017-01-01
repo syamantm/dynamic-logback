@@ -5,6 +5,6 @@ import scala.concurrent.Future
 /**
   * @author syamantak.
   */
-trait ExternalSource {
-  def getAppenderState(): Future[AppenderState]
+trait LoggingConfigSource {
+  def getLoggerState(): Future[LoggerState]
 }

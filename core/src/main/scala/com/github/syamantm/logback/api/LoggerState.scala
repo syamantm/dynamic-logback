@@ -16,7 +16,7 @@ import scala.concurrent.duration.TimeUnit
 case class LoggerLogLevel(logger: String, level: String)
 
 
-case class AppenderState(logLevels: Seq[LoggerLogLevel])
+case class LoggerState(logLevels: Seq[LoggerLogLevel])
 
 /**
   *
