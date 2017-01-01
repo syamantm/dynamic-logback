@@ -36,7 +36,7 @@ val dynamoDbClient = new AmazonDynamoDBClient(new DefaultAWSCredentialsProviderC
 val source: ExternalSource = DynamoDBSource(dynamoDbConfig, dynamoDbClient)
 
 val config = ScheduleConfig(..)
-val scheduler = new LoggerChangeScheduler(source, config)
+val scheduler = new DefaultLoggerChangeScheduler(source, config)
 
 // start the scheduler
 scheduler.start()
